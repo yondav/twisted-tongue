@@ -1,7 +1,9 @@
 import { Router } from 'express';
 
 import {
-  getPlaceholderTwister,
+  getProvider,
+  PROMPT_SPEC,
+  renderPrompt,
   tokenizeTwister,
   validateTwisterParams,
 } from '../lib';
@@ -13,7 +15,7 @@ import {
 
 const router = Router();
 
-router.get('/', (req, res) => {
+router.get('/', async (req, res) => {
   const requestId = `req_${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 
   const validation = validateTwisterParams({
@@ -36,8 +38,14 @@ router.get('/', (req, res) => {
     return res.status(400).json(response);
   }
 
+  const prompt = renderPrompt(PROMPT_SPEC, validation.value);
+  const provider = getProvider();
+  const { twister, provider: providerName } = await provider.generateTwister(
+    validation.value,
+    prompt
+  );
+
   const { theme } = validation.value;
-  const twister = getPlaceholderTwister(validation.value);
 
   const response: ApiResponse<TwisterResponse> = {
     success: true,
@@ -47,7 +55,7 @@ router.get('/', (req, res) => {
       twister,
       tokens: tokenizeTwister(twister),
       createdAt: new Date().toISOString(),
-      provider: 'placeholder',
+      provider: providerName,
     },
     requestId,
   };
