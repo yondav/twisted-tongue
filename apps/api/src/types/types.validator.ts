@@ -20,3 +20,7 @@ export type ValidationFailure = {
 };
 
 export type ValidationResult = ValidationSuccess | ValidationFailure;
+
+export const isValidationFailure = (
+  result: ValidationResult
+): result is ValidationFailure => !result.ok;

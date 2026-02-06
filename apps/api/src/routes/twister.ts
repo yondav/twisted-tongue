@@ -5,7 +5,11 @@ import {
   tokenizeTwister,
   validateTwisterParams,
 } from '../lib';
-import type { ApiResponse, TwisterResponse } from '../types';
+import {
+  isValidationFailure,
+  type ApiResponse,
+  type TwisterResponse,
+} from '../types';
 
 const router = Router();
 
@@ -18,7 +22,7 @@ router.get('/', (req, res) => {
     length: req.query.length as string | undefined,
   });
 
-  if (!validation.ok) {
+  if (isValidationFailure(validation)) {
     const response: ApiResponse<TwisterResponse> = {
       success: false,
       error: {
