@@ -22,7 +22,7 @@ router.get('/', (req, res) => {
     length: req.query.length as string | undefined,
   });
 
-  if (isValidationFailure(validation)) {
+  if (!validation.ok) {
     const response: ApiResponse<TwisterResponse> = {
       success: false,
       error: {
