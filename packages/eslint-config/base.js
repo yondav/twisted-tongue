@@ -27,7 +27,7 @@ export const config = [
     },
     rules: {
       "prettier/prettier": "warn",
-      "turbo/no-undeclared-env-vars": ["warn", { allowList: ["PORT"] }],
+      "turbo/no-undeclared-env-vars": ["warn"],
       "no-console": ["warn", { allow: ["error"] }],
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-unused-vars": "error",
