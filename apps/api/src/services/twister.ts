@@ -9,12 +9,11 @@ import {
   LENGTH_WORD_RANGE,
   DIFFICULTY_INSTRUCTIONS,
 } from '../lib';
-import type {
-  TwisterQueryParams,
-  PromptSpec,
-  TwisterErrorResponse,
-} from '../types';
 import {
+  isValidationFailure,
+  type TwisterQueryParams,
+  type PromptSpec,
+  type TwisterErrorResponse,
   type Difficulty,
   type LengthPreset as Length,
   type Nullable,
@@ -243,7 +242,7 @@ export class TwisterService {
     const provider = this.normalizeProvider(params.provider);
     const validation = this.validateInputs(params);
 
-    if (!validation.ok) {
+    if (isValidationFailure(validation)) {
       const { statusCode, ...response } =
         ResponseService.failure<TwisterErrorResponse>('Validation error', {
           code: validation.code,

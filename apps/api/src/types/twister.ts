@@ -96,3 +96,8 @@ export type ValidationFailure = {
 
 // Input validation union
 export type ValidationResult = ValidationSuccess | ValidationFailure;
+
+// Type guard for validation failures
+export const isValidationFailure = (
+  result: ValidationResult
+): result is ValidationFailure => !result.ok;
