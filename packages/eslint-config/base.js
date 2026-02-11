@@ -31,7 +31,10 @@ export const config = [
       "no-console": ["warn", { allow: ["error"] }],
       "@typescript-eslint/consistent-type-imports": "error",
       "@typescript-eslint/no-unused-vars": "error",
-      "@typescript-eslint/no-misused-promises": "error",
+      "@typescript-eslint/no-misused-promises": [
+        "error",
+        { "checksVoidReturn": { "attributes": false } }
+      ],
       "@typescript-eslint/no-floating-promises": "error",
       "import/no-extraneous-dependencies": "error",
       "import/newline-after-import": "warn",

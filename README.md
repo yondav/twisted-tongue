@@ -6,10 +6,8 @@ Client: Tone Labs
 
 Author: Yoni David
 
-
 - [api](twisted-tongue-l3yfaswwq-yondavs-projects.vercel.app)
 - [web](twisted-tongue-5dao5px2k-yondavs-projects.vercel.app)
-
 
 ## Goal
 
@@ -38,4 +36,3 @@ Given that this is a technical assessment, I had to reign in some of my natural 
 [Milestone 1 - Foundation & Tooling](./_planning/milestone-1.md)
 
 [Milestone 2 - API - Provider-Agnostic Twister Generation](./_planning/milestone-2.md)
-

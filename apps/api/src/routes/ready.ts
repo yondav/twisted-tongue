@@ -1,8 +1,8 @@
+import type { TwisterErrorResponse } from '@repo/types';
 import { Router } from 'express';
 
 import { OPENAI_API_KEY } from '../lib';
 import { ResponseService } from '../services';
-import type { TwisterErrorResponse } from '../types';
 
 const router = Router();
 

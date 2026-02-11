@@ -14,7 +14,7 @@
       "dependsOn": ["^check-types"]
     },
     "dev": {
-      "env": ["OPENAI_API_KEY", "PORT"],
+      "env": ["OPENAI_API_KEY", "PORT", "CLIENT_URL"],
       "cache": false,
       "persistent": true
     }
