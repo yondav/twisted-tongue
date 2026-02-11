@@ -1,13 +1,12 @@
-import type {
-  Difficulty,
-  LengthPreset,
-  LengthRange,
-  PromptSpec,
-} from '../types';
+import type { Difficulty, LengthPreset } from '@repo/types';
+
+import type { LengthRange, PromptSpec } from '../types';
 
 /** RUNTIME CONFIG */
 // Runtime config: API key from env
-export const OPENAI_API_KEY = process.env.OPENAI_API_KEY;
+export const OPENAI_API_KEY = process.env.OPENAI_API_KEY ?? '';
+export const PORT = process.env.PORT;
+export const CLIENT_URL = process.env.CLIENT_URL;
 
 /** ENUMS / PRESETS */
 export const DIFFICULTIES: Difficulty[] = [
