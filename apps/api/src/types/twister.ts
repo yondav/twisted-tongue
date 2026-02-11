@@ -1,18 +1,12 @@
-/** PRIMITIVES / SHARED */
-export type Nullable<T> = T | null;
-
+import type {
+  ApiErrorCode,
+  Difficulty,
+  LengthPreset,
+  ProviderName,
+  ProviderUsage,
+} from '@repo/types';
 /** INPUT DOMAIN */
-export type Difficulty = 'easy' | 'medium' | 'hard' | 'expert';
-export type LengthPreset = 'short' | 'medium' | 'long';
 export type LengthRange = { [key in 'min' | 'max']: number };
-
-// Query params for /twister
-export interface TwisterQueryParams {
-  provider?: ProviderName;
-  theme?: string;
-  difficulty?: string;
-  length?: string;
-}
 
 /** PROMPT CONFIG */
 export interface PromptConstraints {
@@ -37,14 +31,6 @@ export interface PromptSpec {
 }
 
 /** PROVIDER DOMAIN */
-export type ProviderName = 'openai' | 'mock';
-
-export type ProviderUsage = {
-  inputTokens?: number;
-  outputTokens?: number;
-  totalTokens?: number;
-};
-
 // Provider output, internal
 export type ProviderTwisterResult = {
   twister: string;
@@ -52,31 +38,6 @@ export type ProviderTwisterResult = {
   model?: string;
   usage?: ProviderUsage;
 };
-
-/** API RESPONSE */
-export type ApiErrorCode =
-  | 'INVALID_THEME'
-  | 'INVALID_DIFFICULTY'
-  | 'INVALID_LENGTH'
-  | 'PROVIDER_FAILURE'
-  | 'INTERNAL_ERROR';
-
-// API payload
-export interface TwisterResponse {
-  id: string;
-  theme: string;
-  twister: string;
-  tokens: string[];
-  createdAt: string;
-  provider: ProviderName;
-  model?: string;
-  usage?: ProviderUsage;
-}
-
-export interface TwisterErrorResponse {
-  code: ApiErrorCode;
-  message: string;
-}
 
 /** VALIDATION */
 export type ValidationSuccess = {

@@ -1,3 +1,12 @@
+import type {
+  Difficulty,
+  LengthPreset as Length,
+  ProviderName,
+  Nullable,
+  TwisterErrorResponse,
+  TwisterResponse,
+  TwisterQueryParams,
+} from '@repo/types';
 import OpenAI from 'openai';
 
 import {
@@ -11,15 +20,8 @@ import {
 } from '../lib';
 import {
   isValidationFailure,
-  type TwisterQueryParams,
   type PromptSpec,
-  type TwisterErrorResponse,
-  type Difficulty,
-  type LengthPreset as Length,
-  type Nullable,
   type PromptInputs,
-  type ProviderName,
-  type TwisterResponse,
   type ProviderTwisterResult,
   type ValidationResult,
 } from '../types';
