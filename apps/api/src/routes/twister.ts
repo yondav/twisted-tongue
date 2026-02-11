@@ -1,7 +1,7 @@
+import type { ProviderName } from '@repo/types';
 import { Router } from 'express';
 
 import { TwisterService } from '../services';
-import type { ProviderName } from '../types';
 
 const router = Router();
 

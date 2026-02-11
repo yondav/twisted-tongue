@@ -9,7 +9,9 @@
   "editor.formatOnSave": true,
   "eslint.format.enable": true,
   "eslint.useFlatConfig": true,
-  "eslint.experimental.useFlatConfig": true,
+  "emmet.includeLanguages": {
+    "postcss": "css"
+  },
   "eslint.validate": [
     "javascript",
     "javascriptreact",
