@@ -2,10 +2,16 @@ import { ArrowLeft, Play, RotateCcw, Square } from 'lucide-react';
 import { useCallback, useEffect, useState } from 'react';
 
 import { Button } from '@/components/ui/button';
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from '@/components/ui/tooltip';
 import { useTwister } from '@/contexts/twister/hook';
 import { cn } from '@/lib/utils';
 
-import { Tooltip, TooltipContent, TooltipTrigger } from '../ui/tooltip';
+import { TwisterMetrics } from './TwisterMetrics';
+import { TwisterScoreBreakdownModal } from './TwisterScoreBreakdownModal';
 
 type TwisterGameControlsProps = {
   onBack?: () => void;
@@ -14,7 +20,8 @@ type TwisterGameControlsProps = {
 export function TwisterGameControls({ onBack }: TwisterGameControlsProps) {
   const {
     gamePlay: {
-      speech: { status },
+      speech: { status, isListening },
+      metrics: { scoreBreakdown },
       startListening,
       resetListening,
       stopListening,
@@ -23,6 +30,7 @@ export function TwisterGameControls({ onBack }: TwisterGameControlsProps) {
 
   const [countDown, setCountDown] = useState(3);
   const [countDownActive, setCountDownActive] = useState(false);
+  const [isScoreOpen, setIsScoreOpen] = useState(false);
 
   useEffect(() => {
     if (!countDownActive) return;
@@ -55,7 +63,6 @@ export function TwisterGameControls({ onBack }: TwisterGameControlsProps) {
     startGame();
   }, [resetListening, startGame]);
 
-  const isListening = status === 'listening';
   const isStopped = status === 'stopped';
   const isIdle = status === 'idle' || status === 'error';
 
@@ -79,6 +86,18 @@ export function TwisterGameControls({ onBack }: TwisterGameControlsProps) {
             {isIdle && !countDownActive && <span>Ready</span>}
             {isStopped && <span>Stopped</span>}
           </div>
+          {isListening || countDownActive ? (
+            <TwisterMetrics />
+          ) : scoreBreakdown ? (
+            <Button
+              onClick={() => setIsScoreOpen(true)}
+              aria-label='Open score breakdown'
+            >
+              Score: {scoreBreakdown.score}
+            </Button>
+          ) : (
+            <TwisterMetrics />
+          )}
           <div className='flex items-center gap-2'>
             {onBack && !isListening && (
               <Tooltip>
@@ -148,12 +167,16 @@ export function TwisterGameControls({ onBack }: TwisterGameControlsProps) {
         </div>
       </section>
       {countDownActive && countDown > 0 && (
-        <div className='fixed top-0 left-0 w-full h-full bg-black/80 text-white backdrop-blur-lg'>
+        <div className='z-50 fixed top-0 left-0 w-full h-full bg-black/80 text-white backdrop-blur-lg'>
           <div className='absolute top-1/2 left-1/2 -translate-1/2 text-9xl text-center font-black'>
             {countDown}
           </div>
         </div>
       )}
+      <TwisterScoreBreakdownModal
+        isOpen={isScoreOpen}
+        onOpenChange={setIsScoreOpen}
+      />
     </>
   );
 }

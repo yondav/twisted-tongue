@@ -6,8 +6,10 @@ Client: Tone Labs
 
 Author: Yoni David
 
-- [api](twisted-tongue-l3yfaswwq-yondavs-projects.vercel.app)
-- [web](twisted-tongue-5dao5px2k-yondavs-projects.vercel.app)
+- [github](https://github.com/yondav/twisted-tongue)
+
+- [deployed api](https://twisted-tongue-api.vercel.app/)
+- [deployed web](https://twisted-tongue-web.vercel.app/)
 
 ## Goal
 
@@ -36,3 +38,7 @@ Given that this is a technical assessment, I had to reign in some of my natural 
 [Milestone 1 - Foundation & Tooling](./_planning/milestone-1.md)
 
 [Milestone 2 - API - Provider-Agnostic Twister Generation](./_planning/milestone-2.md)
+
+[Milestone 3 - API - Web - Core UI + Theme Flow](./_planning/milestone-3.md)
+
+[Milestone 4 - API - Web - Live Transcription + Scoring](./_planning/milestone-4.md)

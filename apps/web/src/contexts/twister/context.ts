@@ -11,6 +11,17 @@ import { noopAsync, type ApiStatus } from '@/contexts/initializer';
 export type TwisterStatus = ApiStatus | 'idle';
 export type ListeningStatus = 'idle' | 'listening' | 'stopped' | 'error';
 
+export interface ScoreBreakdown {
+  score: number;
+  accuracyFactor: number;
+  timeSeconds: number;
+  expectedTime: number;
+  timeFactor: number;
+  difficultyFactor: number;
+  lengthFactor: number;
+  wordCount: number;
+}
+
 export interface SpeechContext {
   status: ListeningStatus;
   error: Nullable<string>;
@@ -23,12 +34,21 @@ export interface TranscriptContext {
   final: string;
 }
 
+export interface MetricsContext {
+  time: Nullable<number>;
+  accuracy: Nullable<number>;
+  scoreBreakdown: Nullable<ScoreBreakdown>;
+}
+
 export interface GamePlayContext {
   speech: SpeechContext;
   transcript: TranscriptContext;
+  metrics: MetricsContext;
   startListening: () => void;
   stopListening: () => void;
   resetListening: () => void;
+  setTime: (seconds: Nullable<number>) => void;
+  setAccuracy: (accuracy: Nullable<number>) => void;
 }
 
 export interface TwisterProviderState {
@@ -61,9 +81,16 @@ const initialState: TwisterProviderState = {
       interim: '',
       final: '',
     },
+    metrics: {
+      accuracy: null,
+      time: null,
+      scoreBreakdown: null,
+    },
     startListening: () => null,
     stopListening: () => null,
     resetListening: () => null,
+    setAccuracy: () => null,
+    setTime: () => null,
   },
   generateTwister: noopAsync,
   retry: noopAsync,
