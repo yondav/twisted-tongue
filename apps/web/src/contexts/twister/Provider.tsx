@@ -4,19 +4,24 @@ import type {
   Nullable,
   TwisterResponse,
   TwisterQueryParams,
+  Difficulty,
+  LengthPreset,
 } from '@repo/types';
 import { useMutation } from '@tanstack/react-query';
-import { useCallback, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 
 import { useInitializer } from '@/contexts/initializer';
 import { fetchTwister } from '@/lib/queries';
+import { calculateScoreBreakdown } from '@/lib/score';
 
-import type { ListeningStatus, TranscriptContext } from './context';
 import {
   TwisterProviderContext,
   type TwisterProviderProps,
   type TwisterProviderState,
   type TwisterStatus,
+  type ListeningStatus,
+  type TranscriptContext,
+  type ScoreBreakdown,
 } from './context';
 
 export function TwisterProvider({ children }: TwisterProviderProps) {
@@ -59,6 +64,7 @@ export function TwisterProvider({ children }: TwisterProviderProps) {
       setData(null);
       setError(null);
       setLastParams(resolvedParams);
+      setScoreBreakdown(null);
 
       try {
         const response = await mutation.mutateAsync({
@@ -101,6 +107,10 @@ export function TwisterProvider({ children }: TwisterProviderProps) {
   const [speechStatus, setSpeechStatus] = useState<ListeningStatus>('idle');
   const [speechError, setSpeechError] = useState<Nullable<string>>(null);
   const [lastUpdateAt, setLastUpdateAt] = useState<Nullable<number>>(null);
+  const [time, setTime] = useState<Nullable<number>>(null);
+  const [accuracy, setAccuracy] = useState<Nullable<number>>(null);
+  const [scoreBreakdown, setScoreBreakdown] =
+    useState<Nullable<ScoreBreakdown>>(null);
   const [transcript, setTranscript] = useState<TranscriptContext>({
     interim: '',
     final: '',
@@ -205,12 +215,36 @@ export function TwisterProvider({ children }: TwisterProviderProps) {
     setLastUpdateAt(null);
     setTranscript({ interim: '', final: '' });
     lastUpdateRef.current = Date.now();
+    setScoreBreakdown(null);
   }, [clearSilenceTimer]);
 
   const isListening = useMemo(
     () => speechStatus === 'listening',
     [speechStatus]
   );
+
+  useEffect(() => {
+    if (speechStatus !== 'stopped') return;
+    if (!data?.tokens?.length || accuracy === null || time === null) return;
+    if (!lastParams?.difficulty || !lastParams?.length) return;
+
+    const breakdown = calculateScoreBreakdown({
+      accuracyPercent: accuracy,
+      timeSeconds: time / 100,
+      difficulty: lastParams.difficulty as Difficulty,
+      length: lastParams.length as LengthPreset,
+      wordCount: data.tokens.length,
+    });
+
+    setScoreBreakdown(breakdown);
+  }, [
+    accuracy,
+    data?.tokens,
+    lastParams?.difficulty,
+    lastParams?.length,
+    speechStatus,
+    time,
+  ]);
 
   const value: TwisterProviderState = useMemo(
     () => ({
@@ -226,6 +260,13 @@ export function TwisterProvider({ children }: TwisterProviderProps) {
           lastUpdateAt,
         },
         transcript,
+        metrics: {
+          time,
+          accuracy,
+          scoreBreakdown,
+        },
+        setTime,
+        setAccuracy,
         startListening,
         stopListening,
         resetListening,
@@ -234,6 +275,7 @@ export function TwisterProvider({ children }: TwisterProviderProps) {
       retry,
     }),
     [
+      accuracy,
       data,
       error,
       generateTwister,
@@ -244,9 +286,11 @@ export function TwisterProvider({ children }: TwisterProviderProps) {
       retry,
       speechError,
       speechStatus,
+      scoreBreakdown,
       startListening,
       status,
       stopListening,
+      time,
       transcript,
     ]
   );
