@@ -128,6 +128,7 @@ export class TwisterService {
     const edgePunctuation = /^[^A-Za-z0-9']+|[^A-Za-z0-9']+$/g;
 
     return text
+      .toLowerCase()
       .trim()
       .split(/\s+/)
       .map(word => word.replace(edgePunctuation, ''))
